@@ -2,9 +2,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using MessagePack;
 using MessagePack.Resolvers;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Netcorext.Serialization;
 using Netcorext.Serialization.Json;
+using Netcorext.Serialization.Json.MessagePack.Formatters;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -20,42 +21,51 @@ public static class ServiceCollectionExtension
 
     public static IServiceCollection AddSystemJsonSerializer(this IServiceCollection services, Action<IServiceProvider, JsonSerializerOptions>? configure = null)
     {
-        services.TryAddSingleton<JsonSerializerOptions>(provider =>
-                                                        {
-                                                            var options = new JsonSerializerOptions
-                                                                          {
-                                                                              PropertyNameCaseInsensitive = true,
-                                                                              DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                                                                              WriteIndented = false,
-                                                                              PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                                                                              ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                                                                              NumberHandling = JsonNumberHandling.AllowReadingFromString
-                                                                          };
+        services.AddSingleton<ISerializer, SystemJsonSerializer>(provider =>
+                                                                 {
+                                                                     var options = new JsonSerializerOptions
+                                                                                   {
+                                                                                       PropertyNameCaseInsensitive = true,
+                                                                                       DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                                                                                       WriteIndented = false,
+                                                                                       PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                                                                                       ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                                                                                       NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                                   };
 
-                                                            configure?.Invoke(provider, options);
+                                                                     configure?.Invoke(provider, options);
 
-                                                            return options;
-                                                        });
+                                                                     var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+                                                                     var logger = loggerFactory.CreateLogger<SystemJsonSerializer>();
 
-        services.AddSingleton<ISerializer, SystemJsonSerializer>();
+                                                                     return new SystemJsonSerializer(options, logger);
+                                                                 });
 
         return services;
     }
 
     public static IServiceCollection AddMsgPackJsonSerializer(this IServiceCollection services, Action<IServiceProvider, MessagePackSerializerOptions>? configure = null)
     {
-        services.TryAddSingleton<MessagePackSerializerOptions>(provider =>
-                                                               {
-                                                                   var options = new MessagePackSerializerOptions(new DynamicContractlessObjectResolverAllowPrivate());
+        services.AddSingleton<ISerializer, MsgPackJsonSerializer>(provider =>
+                                                                  {
+                                                                      var dateTimeResolver = CompositeResolver.Create(new DateTimeFormatter(),
+                                                                                                                      new NullableDateTimeFormatter(),
+                                                                                                                      new DateTimeOffsetFormatter(),
+                                                                                                                      new NullableDateTimeOffsetFormatter());
 
-                                                                   options.WithCompression(MessagePackCompression.Lz4Block);
+                                                                      var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
-                                                                   configure?.Invoke(provider, options);
+                                                                      var options = TypelessContractlessStandardResolver.Options
+                                                                                                                        .WithResolver(resolver)
+                                                                                                                        .WithCompression(MessagePackCompression.Lz4BlockArray);
 
-                                                                   return options;
-                                                               });
+                                                                      configure?.Invoke(provider, options);
 
-        services.AddSingleton<ISerializer, MsgPackJsonSerializer>();
+                                                                      var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+                                                                      var logger = loggerFactory.CreateLogger<MsgPackJsonSerializer>();
+
+                                                                      return new MsgPackJsonSerializer(options, logger);
+                                                                  });
 
         return services;
     }

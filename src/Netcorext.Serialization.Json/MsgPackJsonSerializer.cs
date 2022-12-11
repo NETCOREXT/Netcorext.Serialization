@@ -18,7 +18,9 @@ public class MsgPackJsonSerializer : ISerializer
     {
         try
         {
-            return MessagePackSerializer.SerializeToJson(value, _options);
+            var bytes = MessagePackSerializer.Serialize(value, _options);
+            
+            return Convert.ToBase64String(bytes);
         }
         catch (Exception e)
         {
@@ -40,7 +42,7 @@ public class MsgPackJsonSerializer : ISerializer
             
             var bytes = ms.ToArray();
 
-            return MessagePackSerializer.ConvertToJson(bytes, _options, cancellationToken);
+            return Convert.ToBase64String(bytes);
         }
         catch (Exception e)
         {
@@ -88,7 +90,7 @@ public class MsgPackJsonSerializer : ISerializer
     {
         try
         {
-            var bytes = MessagePackSerializer.ConvertFromJson(utf8String, _options);
+            var bytes = Convert.FromBase64String(utf8String);
             
             return MessagePackSerializer.Deserialize(returnType, bytes, _options);
         }
@@ -104,7 +106,7 @@ public class MsgPackJsonSerializer : ISerializer
     {
         try
         {
-            var bytes = MessagePackSerializer.ConvertFromJson(utf8String, _options);
+            var bytes = Convert.FromBase64String(utf8String);
             
             return MessagePackSerializer.Deserialize<T>(bytes, _options);
         }
@@ -123,13 +125,7 @@ public class MsgPackJsonSerializer : ISerializer
             if (utf8Stream.CanSeek)
                 utf8Stream.Seek(0, SeekOrigin.Begin);
 
-            using var sr = new StreamReader(utf8Stream);
-
-            var json = sr.ReadToEnd();
-            
-            var bytes = MessagePackSerializer.ConvertFromJson(json, _options);
-            
-            return MessagePackSerializer.Deserialize(returnType, bytes, _options);
+            return MessagePackSerializer.Deserialize(returnType, utf8Stream, _options);
         }
         catch (Exception e)
         {
@@ -145,14 +141,8 @@ public class MsgPackJsonSerializer : ISerializer
         {
             if (utf8Stream.CanSeek)
                 utf8Stream.Seek(0, SeekOrigin.Begin);
-
-            using var sr = new StreamReader(utf8Stream);
-
-            var json = sr.ReadToEnd();
             
-            var bytes = MessagePackSerializer.ConvertFromJson(json, _options);
-            
-            return MessagePackSerializer.Deserialize<T>(bytes, _options);
+            return MessagePackSerializer.Deserialize<T>(utf8Stream, _options);
         }
         catch (Exception e)
         {
@@ -166,7 +156,7 @@ public class MsgPackJsonSerializer : ISerializer
     {
         try
         {
-            var bytes = MessagePackSerializer.ConvertFromJson(utf8String, _options, cancellationToken);
+            var bytes = Convert.FromBase64String(utf8String);
 
             using var ms = new MemoryStream();
             
@@ -188,7 +178,7 @@ public class MsgPackJsonSerializer : ISerializer
     {
         try
         {
-            var bytes = MessagePackSerializer.ConvertFromJson(utf8String, _options, cancellationToken);
+            var bytes = Convert.FromBase64String(utf8String);
 
             using var ms = new MemoryStream();
             
@@ -213,19 +203,7 @@ public class MsgPackJsonSerializer : ISerializer
             if (utf8Stream.CanSeek)
                 utf8Stream.Seek(0, SeekOrigin.Begin);
 
-            using var sr = new StreamReader(utf8Stream);
-
-            var json = await sr.ReadToEndAsync();
-            
-            var bytes = MessagePackSerializer.ConvertFromJson(json, _options, cancellationToken);
-            
-            using var ms = new MemoryStream();
-            
-            await ms.WriteAsync(bytes, cancellationToken);
-
-            ms.Seek(0, SeekOrigin.Begin);
-            
-            return await MessagePackSerializer.DeserializeAsync(returnType, ms, _options, cancellationToken);
+            return await MessagePackSerializer.DeserializeAsync(returnType, utf8Stream, _options, cancellationToken);
         }
         catch (Exception e)
         {
@@ -242,19 +220,7 @@ public class MsgPackJsonSerializer : ISerializer
             if (utf8Stream.CanSeek)
                 utf8Stream.Seek(0, SeekOrigin.Begin);
 
-            using var sr = new StreamReader(utf8Stream);
-
-            var json = await sr.ReadToEndAsync();
-            
-            var bytes = MessagePackSerializer.ConvertFromJson(json, _options, cancellationToken);
-
-            using var ms = new MemoryStream();
-            
-            await ms.WriteAsync(bytes, cancellationToken);
-
-            ms.Seek(0, SeekOrigin.Begin);
-            
-            return await MessagePackSerializer.DeserializeAsync<T>(ms, _options, cancellationToken);
+            return await MessagePackSerializer.DeserializeAsync<T>(utf8Stream, _options, cancellationToken);
         }
         catch (Exception e)
         {
@@ -262,5 +228,21 @@ public class MsgPackJsonSerializer : ISerializer
 
             return default;
         }
+    }
+
+    public string? ToJson(byte[] bytes)
+    {
+        try
+        {
+            MessagePackSerializer.ConvertToJson(bytes, _options);
+            return MessagePackSerializer.ConvertToJson(bytes, _options);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{Message}", e);
+
+            return default;
+        }
+        
     }
 }
