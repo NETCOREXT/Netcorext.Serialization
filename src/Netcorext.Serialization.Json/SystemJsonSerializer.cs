@@ -109,6 +109,42 @@ public class SystemJsonSerializer : ISerializer
         }
     }
 
+    public object? Deserialize(byte[] utf8Bytes, Type returnType)
+    {
+        try
+        {
+            using var ms = new MemoryStream(utf8Bytes);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return JsonSerializer.Deserialize(ms, returnType, _options);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{Message}", e);
+
+            return default;
+        }
+    }
+
+    public T? Deserialize<T>(byte[] utf8Bytes)
+    {
+        try
+        {
+            using var ms = new MemoryStream(utf8Bytes);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return JsonSerializer.Deserialize<T>(ms, _options);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{Message}", e);
+
+            return default;
+        }
+    }
+
     public object? Deserialize(Stream utf8Stream, Type returnType)
     {
         try
@@ -174,6 +210,42 @@ public class SystemJsonSerializer : ISerializer
             var bytes = Encoding.UTF8.GetBytes(utf8String);
 
             await ms.WriteAsync(bytes, cancellationToken);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return await JsonSerializer.DeserializeAsync<T>(ms, _options, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{Message}", e);
+
+            return default;
+        }
+    }
+
+    public async Task<object?> DeserializeAsync(byte[] utf8Bytes, Type returnType, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var ms = new MemoryStream(utf8Bytes);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            return await JsonSerializer.DeserializeAsync(ms, returnType, _options, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "{Message}", e);
+
+            return default;
+        }
+    }
+
+    public async Task<T?> DeserializeAsync<T>(byte[] utf8Bytes, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var ms = new MemoryStream(utf8Bytes);
 
             ms.Seek(0, SeekOrigin.Begin);
 

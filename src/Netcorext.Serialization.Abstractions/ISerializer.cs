@@ -10,10 +10,14 @@ public interface ISerializer
 
     object? Deserialize(string utf8String, Type returnType);
     T? Deserialize<T>(string utf8String);
+    object? Deserialize(byte[] utf8Bytes, Type returnType);
+    T? Deserialize<T>(byte[] utf8Bytes);
     object? Deserialize(Stream utf8Stream, Type returnType);
     T? Deserialize<T>(Stream utf8Stream);
     Task<object?> DeserializeAsync(string utf8String, Type returnType, CancellationToken cancellationToken = default);
     Task<T?> DeserializeAsync<T>(string utf8String, CancellationToken cancellationToken = default);
+    Task<object?> DeserializeAsync(byte[] utf8Bytes, Type returnType, CancellationToken cancellationToken = default);
+    Task<T?> DeserializeAsync<T>(byte[] utf8Bytes, CancellationToken cancellationToken = default);
     Task<object?> DeserializeAsync(Stream utf8Stream, Type returnType, CancellationToken cancellationToken = default);
     Task<T?> DeserializeAsync<T>(Stream utf8Stream, CancellationToken cancellationToken = default);
 }
