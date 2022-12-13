@@ -21,3 +21,6 @@ public interface ISerializer
     Task<object?> DeserializeAsync(Stream utf8Stream, Type returnType, CancellationToken cancellationToken = default);
     Task<T?> DeserializeAsync<T>(Stream utf8Stream, CancellationToken cancellationToken = default);
 }
+
+public interface ISerializer<TSerializer> : ISerializer
+    where TSerializer : ISerializer<TSerializer> { }

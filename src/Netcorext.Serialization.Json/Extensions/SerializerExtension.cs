@@ -15,4 +15,14 @@ public static class SerializerExtension
 
         return msgpack.ToJson(bytes);
     }
+
+    public static string? ToJson(this ISerializer<MsgPackJsonSerializer> serializer, byte[]? bytes)
+    {
+        if (bytes is null || bytes.Length == 0)
+            return default;
+
+        var msgpack = (MsgPackJsonSerializer)serializer;
+
+        return msgpack.ToJson(bytes);
+    }
 }

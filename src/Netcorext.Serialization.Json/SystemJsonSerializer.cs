@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Netcorext.Serialization.Json;
 
-public class SystemJsonSerializer : ISerializer
+public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
 {
     private readonly JsonSerializerOptions _options;
     private readonly ILogger<SystemJsonSerializer> _logger;

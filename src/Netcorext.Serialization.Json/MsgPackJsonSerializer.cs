@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Netcorext.Serialization.Json;
 
-public class MsgPackJsonSerializer : ISerializer
+public class MsgPackJsonSerializer : ISerializer<MsgPackJsonSerializer>
 {
     private readonly MessagePackSerializerOptions _options;
     private readonly ILogger<MsgPackJsonSerializer> _logger;
