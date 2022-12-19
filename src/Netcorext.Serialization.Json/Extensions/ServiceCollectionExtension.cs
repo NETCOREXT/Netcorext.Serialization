@@ -185,8 +185,7 @@ public static class ServiceCollectionExtension
                                                                       var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                                       var options = TypelessContractlessStandardResolver.Options
-                                                                                                                        .WithResolver(resolver)
-                                                                                                                        .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                                        .WithResolver(resolver);
 
                                                                       configure?.Invoke(provider, options);
 
@@ -206,8 +205,7 @@ public static class ServiceCollectionExtension
                                                                                              var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                                                              var options = TypelessContractlessStandardResolver.Options
-                                                                                                                                               .WithResolver(resolver)
-                                                                                                                                               .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                                                               .WithResolver(resolver);
 
                                                                                              configure?.Invoke(provider, options);
 
@@ -232,8 +230,7 @@ public static class ServiceCollectionExtension
                                                        var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                        var options = TypelessContractlessStandardResolver.Options
-                                                                                                         .WithResolver(resolver)
-                                                                                                         .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                         .WithResolver(resolver);
 
                                                        configure?.Invoke(provider, options);
 
@@ -253,8 +250,7 @@ public static class ServiceCollectionExtension
                                                                               var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                                               var options = TypelessContractlessStandardResolver.Options
-                                                                                                                                .WithResolver(resolver)
-                                                                                                                                .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                                                .WithResolver(resolver);
 
                                                                               configure?.Invoke(provider, options);
 
@@ -279,8 +275,7 @@ public static class ServiceCollectionExtension
                                                   var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                   var options = TypelessContractlessStandardResolver.Options
-                                                                                                    .WithResolver(resolver)
-                                                                                                    .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                    .WithResolver(resolver);
 
                                                   configure?.Invoke(provider, options);
 
@@ -300,8 +295,7 @@ public static class ServiceCollectionExtension
                                                                          var resolver = CompositeResolver.Create(dateTimeResolver, TypelessContractlessStandardResolver.Instance);
 
                                                                          var options = TypelessContractlessStandardResolver.Options
-                                                                                                                           .WithResolver(resolver)
-                                                                                                                           .WithCompression(MessagePackCompression.Lz4BlockArray);
+                                                                                                                           .WithResolver(resolver);
 
                                                                          configure?.Invoke(provider, options);
 
