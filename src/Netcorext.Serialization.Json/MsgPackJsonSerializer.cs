@@ -186,9 +186,7 @@ public class MsgPackJsonSerializer : ISerializer<MsgPackJsonSerializer>
         {
             var bytes = Convert.FromBase64String(utf8String);
 
-            using var ms = new MemoryStream();
-            
-            await ms.WriteAsync(bytes, cancellationToken);
+            using var ms = new MemoryStream(bytes);
 
             ms.Seek(0, SeekOrigin.Begin);
             
@@ -208,9 +206,7 @@ public class MsgPackJsonSerializer : ISerializer<MsgPackJsonSerializer>
         {
             var bytes = Convert.FromBase64String(utf8String);
 
-            using var ms = new MemoryStream();
-            
-            await ms.WriteAsync(bytes, cancellationToken);
+            using var ms = new MemoryStream(bytes);
 
             ms.Seek(0, SeekOrigin.Begin);
             
@@ -307,6 +303,5 @@ public class MsgPackJsonSerializer : ISerializer<MsgPackJsonSerializer>
 
             return default;
         }
-        
     }
 }

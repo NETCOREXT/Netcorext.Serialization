@@ -184,11 +184,9 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         try
         {
             using var ms = new MemoryStream();
-
-            var bytes = Encoding.UTF8.GetBytes(utf8String);
-
-            await ms.WriteAsync(bytes, cancellationToken);
-
+            await using var sw = new StreamWriter(ms);
+            await sw.WriteAsync(utf8String);
+            
             ms.Seek(0, SeekOrigin.Begin);
 
             return await JsonSerializer.DeserializeAsync(ms, returnType, _options, cancellationToken);
@@ -206,10 +204,8 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         try
         {
             using var ms = new MemoryStream();
-
-            var bytes = Encoding.UTF8.GetBytes(utf8String);
-
-            await ms.WriteAsync(bytes, cancellationToken);
+            await using var sw = new StreamWriter(ms);
+            await sw.WriteAsync(utf8String);
 
             ms.Seek(0, SeekOrigin.Begin);
 
