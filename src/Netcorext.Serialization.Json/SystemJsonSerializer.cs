@@ -19,7 +19,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
     {
         try
         {
-            return JsonSerializer.Serialize(value, _options);
+            return JsonSerializer.Serialize(value, value!.GetType(), _options);
         }
         catch (Exception e)
         {
@@ -35,7 +35,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         {
             using var ms = new MemoryStream();
 
-            await JsonSerializer.SerializeAsync(ms, value, _options, cancellationToken);
+            await JsonSerializer.SerializeAsync(ms, value, value!.GetType(), _options, cancellationToken);
 
             var bytes = ms.ToArray();
 
@@ -53,7 +53,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
     {
         try
         {
-            return JsonSerializer.SerializeToUtf8Bytes(value, _options);
+            return JsonSerializer.SerializeToUtf8Bytes(value,value!.GetType(), _options);
         }
         catch (Exception e)
         {
@@ -69,7 +69,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         {
             using var ms = new MemoryStream();
 
-            await JsonSerializer.SerializeAsync(ms, value, _options, cancellationToken);
+            await JsonSerializer.SerializeAsync(ms, value, value!.GetType(), _options, cancellationToken);
 
             return ms.ToArray();
         }
