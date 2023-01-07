@@ -23,7 +23,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -43,7 +43,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -53,11 +53,11 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
     {
         try
         {
-            return JsonSerializer.SerializeToUtf8Bytes(value,value!.GetType(), _options);
+            return JsonSerializer.SerializeToUtf8Bytes(value, value!.GetType(), _options);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -75,7 +75,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -89,7 +89,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -103,7 +103,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -121,7 +121,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -139,7 +139,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -156,7 +156,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -173,7 +173,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -187,14 +187,14 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
             await using var sw = new StreamWriter(ms);
             await sw.WriteAsync(utf8String);
             await sw.FlushAsync();
-            
+
             ms.Seek(0, SeekOrigin.Begin);
 
             return await JsonSerializer.DeserializeAsync(ms, returnType, _options, cancellationToken);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -208,14 +208,14 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
             await using var sw = new StreamWriter(ms);
             await sw.WriteAsync(utf8String);
             await sw.FlushAsync();
-            
+
             ms.Seek(0, SeekOrigin.Begin);
 
             return await JsonSerializer.DeserializeAsync<T>(ms, _options, cancellationToken);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -233,7 +233,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -251,7 +251,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -268,7 +268,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
@@ -285,7 +285,7 @@ public class SystemJsonSerializer : ISerializer<SystemJsonSerializer>
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "{Message}", e);
+            _logger.LogError(e, "{Message}", e.Message);
 
             return default;
         }
